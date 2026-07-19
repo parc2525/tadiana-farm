@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1A5C2A">
+<title>Tadiana Farm</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,'Segoe UI',sans-serif;background:#F4F5F2;color:#1A1A1A;max-width:430px;margin:0 auto;min-height:100vh;padding-bottom:80px}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit}
+
+/* LOGIN */
+#login-screen{position:fixed;inset:0;background:linear-gradient(160deg,#1A5C2A 0%,#2E7D3C 60%,#1a3a20 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;z-index:1000}
+.login-box{width:100%;max-width:340px;background:#fff;border-radius:24px;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,0.25)}
+.login-logo{font-size:56px;text-align:center;margin-bottom:12px}
+.login-title{font-size:24px;font-weight:900;color:#1A5C2A;text-align:center;margin-bottom:4px}
+.login-sub{font-size:13px;color:#999;text-align:center;margin-bottom:24px}
+.login-input{width:100%;padding:14px;border-radius:12px;border:2px solid #E8E8E8;font-size:20px;letter-spacing:6px;text-align:center;outline:none;transition:border .2s}
+.login-input.error{border-color:#C0392B;background:#FDECEA}
+.login-btn{width:100%;margin-top:14px;padding:14px;border-radius:12px;border:none;background:#1A5C2A;color:#fff;font-size:16px;font-weight:800;cursor:pointer}
+.login-err{color:#C0392B;font-size:13px;text-align:center;margin-top:8px;font-weight:600;min-height:20px}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.shake{animation:shake .4s ease}
+
+/* HEADER */
+.header{background:#fff;border-bottom:1px solid #E8E8E8;padding:12px 16px;position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between}
+.header-logo{display:flex;align-items:center;gap:10px}
+.header-icon{width:34px;height:34px;background:#1A5C2A;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.header-name{font-size:15px;font-weight:900;color:#1A5C2A;line-height:1}
+.header-sub{font-size:11px;color:#999}
+.header-btn{width:36px;height:36px;border-radius:50%;background:#1A5C2A;border:none;color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center}
+
+/* BOTTOM NAV */
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#fff;border-top:1px solid #E8E8E8;display:flex;z-index:100}
+.nav-btn{flex:1;padding:10px 2px 10px;border:none;background:none;display:flex;flex-direction:column;align-items:center;gap:2px}
+.nav-btn span.emoji{font-size:20px}
+.nav-btn span.lbl{font-size:10px;color:#999;font-weight:400}
+.nav-btn.active span.lbl{color:#1A5C2A;font-weight:800}
+.nav-dot{width:18px;height:3px;background:#1A5C2A;border-radius:2px;margin-top:1px}
+
+/* PAGE */
+.page{padding:16px}
+
+/* CARDS */
+.card{background:#fff;border-radius:16px;padding:16px;margin-bottom:10px;box-shadow:0 1px 8px rgba(0,0,0,0.05);border:1px solid #E8E8E8}
+.card-click{cursor:pointer}
+
+/* HERO */
+.hero{border-radius:20px;padding:20px;margin-bottom:14px;color:#fff}
+.hero-sub{font-size:12px;opacity:.7;margin-bottom:4px}
+.hero-title{font-size:22px;font-weight:900;margin-bottom:2px}
+.hero-date{font-size:13px;opacity:.7;margin-bottom:16px}
+.hero-bilan{background:rgba(255,255,255,0.12);border-radius:16px;padding:14px 16px}
+.hero-bilan-label{font-size:12px;opacity:.65;margin-bottom:4px}
+.hero-bilan-val{font-size:28px;font-weight:900}
+.hero-bilan-row{display:flex;gap:1px;margin-top:10px}
+.hero-bilan-col{flex:1;background:rgba(255,255,255,0.12);padding:10px 14px}
+.hero-bilan-col:first-child{border-radius:12px 0 0 12px}
+.hero-bilan-col:last-child{border-radius:0 12px 12px 0}
+.hero-bilan-col-lbl{font-size:11px;opacity:.65}
+.hero-bilan-col-val{font-size:15px;font-weight:800}
+
+/* PROGRESS BAR */
+.progress-wrap{background:rgba(255,255,255,0.2);border-radius:20px;height:8px;overflow:hidden;margin:10px 0 6px}
+.progress-fill{height:100%;background:#fff;border-radius:20px;transition:width .5s ease}
+
+/* PILLS */
+.pill{display:inline-block;border-radius:20px;padding:3px 10px;font-size:12px;font-weight:700;white-space:nowrap}
+
+/* SECTION TITLE */
+.sec-title{font-size:11px;font-weight:700;color:#555;letter-spacing:1px;text-transform:uppercase;margin:20px 0 10px}
+
+/* TASK ITEMS */
+.task-item{background:#fff;border-radius:16px;margin-bottom:10px;border:1.5px solid #E8E8E8;box-shadow:0 2px 8px rgba(0,0,0,0.05);overflow:hidden}
+.task-body{padding:14px 16px}
+.task-check{width:44px;height:44px;border-radius:50%;border:2.5px solid #1A5C2A;background:transparent;font-size:22px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.task-done{opacity:.65;border-left:4px solid #1A5C2A}
+.task-done .task-title{text-decoration:line-through;color:#888}
+.task-budget{font-size:13px;color:#E65100;font-weight:600;margin-top:6px}
+.task-footer{border-top:1px solid #E8E8E8;padding:10px 16px;background:#FFF3E0;font-size:12px;color:#E65100;font-weight:600}
+@keyframes slideOut{0%{opacity:1;transform:translateX(0)}100%{opacity:0;transform:translateX(60px)}}
+.slide-out{animation:slideOut .4s ease forwards}
+
+/* BOTTOM SHEET */
+.sheet-overlay{position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;justify-content:flex-end}
+.sheet-bg{flex:1;background:rgba(0,0,0,0.45)}
+.sheet-box{background:#fff;border-radius:24px 24px 0 0;padding:0 20px 36px;max-height:88vh;overflow-y:auto}
+.sheet-handle{width:40px;height:4px;background:#E8E8E8;border-radius:4px;margin:12px auto 18px}
+.sheet-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.sheet-title{font-size:18px;font-weight:900}
+.sheet-close{background:#F4F5F2;border:none;border-radius:50%;width:34px;height:34px;font-size:16px;cursor:pointer}
+
+/* FORMS */
+.field{margin-bottom:14px}
+.field label{font-size:11px;font-weight:700;color:#555;display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+.field input,.field select,.field textarea{width:100%;padding:11px 14px;border-radius:12px;border:1.5px solid #E8E8E8;font-size:15px;background:#fff;outline:none}
+.field textarea{resize:vertical}
+
+/* BUTTONS */
+.btn{border-radius:12px;padding:13px 20px;font-size:15px;font-weight:700;border:none;cursor:pointer;width:100%;margin-bottom:8px}
+.btn-green{background:#1A5C2A;color:#fff}
+.btn-green2{background:#2E7D3C;color:#fff}
+.btn-red{background:#C0392B;color:#fff}
+.btn-outline{background:transparent;border:2px solid #1A5C2A;color:#1A5C2A}
+.btn-wa{background:#25D366;color:#fff;display:flex;align-items:center;justify-content:center;gap:10px;font-size:16px}
+.btn-sm{padding:8px 16px;font-size:13px;width:auto}
+.btn-row{display:flex;gap:10px}
+.btn-row .btn{flex:1;margin-bottom:0}
+
+/* STATS GRID */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.stat-box{background:#fff;border-radius:14px;padding:14px;border:1px solid #E8E8E8;text-align:center}
+.stat-val{font-size:20px;font-weight:900}
+.stat-lbl{font-size:11px;color:#999;margin-top:2px}
+
+/* RAPPEL ITEMS */
+.rappel-item{display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid #E8E8E8}
+.rappel-item:last-child{border-bottom:none}
+.rappel-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+
+/* FINANCE TABS */
+.tab-bar{display:flex;background:#F4F5F2;border-radius:12px;padding:4px;margin-bottom:14px}
+.tab-btn{flex:1;padding:9px 4px;border:none;border-radius:10px;font-size:13px;cursor:pointer;background:transparent;color:#888;font-weight:400;transition:all .15s}
+.tab-btn.active{background:#fff;color:#1A5C2A;font-weight:700}
+
+/* MISC */
+.row{display:flex;align-items:center}
+.row-between{display:flex;align-items:center;justify-content:space-between}
+.gap8{gap:8px}
+.gap12{gap:12px}
+.empty{text-align:center;padding:40px 20px;color:#999}
+.empty-icon{font-size:40px;margin-bottom:12px}
+.divider{height:1px;background:#E8E8E8;margin:8px 0}
+.green{color:#1A5C2A}
+.red{color:#C0392B}
+.orange{color:#E65100}
+.gold{color:#B8860B}
+.italic{font-style:italic}
+.small{font-size:12px;color:#999}
+.bold{font-weight:700}
+.mt4{margin-top:4px}
+.mt8{margin-top:8px}
+.mt12{margin-top:12px}
+.mt16{margin-top:16px}
+
+/* WORKER HERO */
+.worker-hero{background:linear-gradient(135deg,#1A5C2A 0%,#2E7D3C 100%);padding:20px 20px 28px}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div style="font-size:64px;margin-bottom:12px;text-align:center">🌿</div>
+  <div style="font-size:26px;font-weight:900;color:#fff;text-align:center;margin-bottom:4px">Tadiana Farm</div>
+  <div style="font-size:14px;color:rgba(255,255,255,0.65);text-align:center;margin-bottom:36px">Koulikoro · Mali · 5,06 ha</div>
+  <div class="login-box">
+    <div style="font-size:16px;font-weight:800;margin-bottom:6px">Connexion</div>
+    <div style="font-size:13px;color:#999;margin-bottom:20px">Entrez votre code d'accès</div>
+    <input type="password" id="code-input" class="login-input" placeholder="••••" maxlength="6"
+      oninput="loginErr('')" onkeydown="if(event.key==='Enter')doLogin()">
+    <div class="login-err" id="login-err"></div>
+    <button class="login-btn" onclick="doLogin()">Accéder →</button>
+  </div>
+</div>
+
+<!-- APP (hidden until login) -->
+<div id="app" style="display:none">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-logo">
+      <div class="header-icon">🌿</div>
+      <div>
+        <div class="header-name">Tadiana Farm</div>
+        <div class="header-sub" id="header-role">5,06 ha · Koulikoro, Mali</div>
+      </div>
+    </div>
+    <div id="header-right"></div>
+  </div>
+
+  <!-- PAGES -->
+  <div id="page-content"></div>
+
+  <!-- BOTTOM NAV (admin only) -->
+  <nav class="bottom-nav" id="bottom-nav" style="display:none">
+    <button class="nav-btn active" id="nav-dashboard" onclick="goTab('dashboard')">
+      <span class="emoji">📊</span><span class="lbl">Bilan</span>
+    </button>
+    <button class="nav-btn" id="nav-taches" onclick="goTab('taches')">
+      <span class="emoji">✅</span><span class="lbl">Tâches</span>
+    </button>
+    <button class="nav-btn" id="nav-depenses" onclick="goTab('depenses')">
+      <span class="emoji">💸</span><span class="lbl">Finances</span>
+    </button>
+    <button class="nav-btn" id="nav-rapports" onclick="goTab('rapports')">
+      <span class="emoji">📋</span><span class="lbl">Rapports</span>
+    </button>
+    <button class="nav-btn" id="nav-animaux" onclick="goTab('animaux')">
+      <span class="emoji">🐐</span><span class="lbl">Animaux</span>
+    </button>
+  </nav>
+
+  <!-- SHEET OVERLAY -->
+  <div class="sheet-overlay" id="sheet" style="display:none" onclick="closeSheet(event)">
+    <div class="sheet-bg"></div>
+    <div class="sheet-box" id="sheet-box">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <div class="sheet-title" id="sheet-title"></div>
+        <button class="sheet-close" onclick="closeSheet()">✕</button>
+      </div>
+      <div id="sheet-content"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────
+const ADMIN_CODE  = "1234";
+const WORKER_CODE = "40";
+
+const fmt = n => Number(n||0).toLocaleString('fr-FR');
+const todayFR = () => new Date().toLocaleDateString('fr-FR');
+const todayISO = () => new Date().toISOString().split('T')[0];
+const nowTime = () => new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+
+// ── STATE ─────────────────────────────────────────────────────────────────
+let role = null;
+let currentTab = 'dashboard';
+let finTab = 'dep';
+
+let taches = [
+  {id:'T001',titre:'Robinet',desc:'Vérifier et réparer le robinet sur le terrain',cat:'Maintenance',couleur:'#E65100',urgent:false,cochee:false,dateCochee:null,heureCochee:null,creeLe:todayFR(),depensePrevue:0,commentaire:'',coutReel:0},
+  {id:'T002',titre:'Désherbage',desc:'Désherbage des parcelles cultures',cat:'Cultures',couleur:'#1A5C2A',urgent:false,cochee:false,dateCochee:null,heureCochee:null,creeLe:todayFR(),depensePrevue:0,commentaire:'',coutReel:0},
+  {id:'T003',titre:'Repiquage piment',desc:'Repiquage des plants de piment — Zone D (0,75 ha). Espacement 50×40cm. Mamadou Koné a confirmé que la pépinière est prête.',cat:'Cultures',couleur:'#1A5C2A',urgent:true,cochee:false,dateCochee:null,heureCochee:null,creeLe:todayFR(),depensePrevue:0,commentaire:'',coutReel:0},
+  {id:'T004',titre:'Suivi 50 agrumes replantés',desc:'Vérifier reprise des 200 nouveaux pieds (100 tangelo + 100 fercelle) plantés le 09/06. Arroser si sol sec.',cat:'Cultures',couleur:'#1A5C2A',urgent:false,cochee:false,dateCochee:null,heureCochee:null,creeLe:todayFR(),depensePrevue:0,commentaire:'',coutReel:0},
+  {id:'T005',titre:'Semis de l\'herbe fourragère',desc:'Semis herbe fourragère sur la parcelle prévue',cat:'Cultures',couleur:'#1A5C2A',urgent:false,cochee:false,dateCochee:null,heureCochee:null,creeLe:todayFR(),depensePrevue:0,commentaire:'',coutReel:0},
+  {id:'T006',titre:'Super Magro — agrumes',desc:'Apport engrais foliaire Super Magro sur les 730 pieds d\'agrumes. Diluer selon dosage. Traiter tôt le matin avant 9h.',cat:'Engrais',couleur:'#D4AC0D',urgent:false,cochee:false,dateCochee:null,heureCochee:null,creeLe:todayFR(),depensePrevue:0,commentaire:'',coutReel:0},
+  {id:'T007',titre:'Haricots avec MORO',desc:'Contacter MORO (intermédiaire) pour les haricots — noter les conditions et le prix convenu',cat:'Cultures',couleur:'#1A5C2A',urgent:false,cochee:false,dateCochee:null,heureCochee:null,creeLe:todayFR(),depensePrevue:0,commentaire:'',coutReel:0},
+  {id:'T008',titre:'Motoculteur',desc:'Labour ou préparation sol au motoculteur — préciser la zone traitée dans le rapport',cat:'Maintenance',couleur:'#E65100',urgent:false,cochee:false,dateCochee:null,heureCochee:null,creeLe:todayFR(),depensePrevue:0,commentaire:'',coutReel:0},
+  {id:'T009',titre:'Fenêtre — Niamakoro Courani',desc:'Récupérer ou faire installer la fenêtre à Niamakoro Courani',cat:'Construction',couleur:'#6A1B9A',urgent:false,cochee:false,dateCochee:null,heureCochee:null,creeLe:todayFR(),depensePrevue:0,commentaire:'',coutReel:0},
+  {id:'T010',titre:'Menuisier — grillage',desc:'Contacter et faire intervenir le menuisier pour le grillage. Noter devis et date.',cat:'Construction',couleur:'#6A1B9A',urgent:false,cochee:false,dateCochee:null,heureCochee:null,creeLe:todayFR(),depensePrevue:0,commentaire:'',coutReel:0},
+  {id:'T011',titre:'Crépissage maison',desc:'Crépissage de la maison et finir l\'autre bâtiment',cat:'Construction',couleur:'#6A1B9A',urgent:false,cochee:false,dateCochee:null,heureCochee:null,creeLe:todayFR(),depensePrevue:0,commentaire:'',coutReel:0},
+  {id:'T012',titre:'Bas du grillage',desc:'Finition et pose du bas du grillage — vérifier toute la longueur',cat:'Construction',couleur:'#6A1B9A',urgent:false,cochee:false,dateCochee:null,heureCochee:null,creeLe:todayFR(),depensePrevue:0,commentaire:'',coutReel:0},
+  {id:'T013',titre:'Cendre de cuisine',desc:'Récupérer la cendre de cuisine — épandre au pied des agrumes (potassium naturel)',cat:'Engrais',couleur:'#D4AC0D',urgent:false,cochee:false,dateCochee:null,heureCochee:null,creeLe:todayFR(),depensePrevue:0,commentaire:'',coutReel:0},
+];
+
+let depenses = [
+  {id:'D001',date:'27/06/2026',cat:'Équipement',desc:'Tracteur Massey Ferguson 165 (1969)',mt:885539,par:'Sangaré'},
+  {id:'D002',date:'01/07/2026',cat:"Main d'œuvre",desc:'Semis riz Wassa — 10 femmes × 2j',mt:40000,par:'Bourama Traoré'},
+  {id:'D003',date:'26/06/2026',cat:'Semences',desc:'Semences piment + haricot',mt:22500,par:'Bourama Traoré'},
+];
+
+let recettes = [];
+
+let animaux = [
+  {id:'M01',type:'Mouton',sexe:'M',couleur:'Blanc',poids:35,statut:'Engraissement',dateEntree:'2026-01-15',collier:'Bleu-01'},
+  {id:'M02',type:'Mouton',sexe:'F',couleur:'Brun',poids:28,statut:'Reproduction',dateEntree:'2026-01-15',collier:'Bleu-02'},
+  {id:'C01',type:'Chèvre',sexe:'F',couleur:'Blanc',poids:22,statut:'Lactation',dateEntree:'2026-01-15',collier:'Jaune-01'},
+];
+
+let rapports = [];
+
+// localStorage persistence
+function saveAll() {
+  try {
+    localStorage.setItem('tadiana_taches',    JSON.stringify(taches));
+    localStorage.setItem('tadiana_depenses',  JSON.stringify(depenses));
+    localStorage.setItem('tadiana_recettes',  JSON.stringify(recettes));
+    localStorage.setItem('tadiana_animaux',   JSON.stringify(animaux));
+    localStorage.setItem('tadiana_rapports',  JSON.stringify(rapports));
+  } catch(e){}
+}
+
+function loadAll() {
+  try {
+    const t = localStorage.getItem('tadiana_taches');
+    const d = localStorage.getItem('tadiana_depenses');
+    const r = localStorage.getItem('tadiana_recettes');
+    const a = localStorage.getItem('tadiana_animaux');
+    const rp = localStorage.getItem('tadiana_rapports');
+    if(t)  taches   = JSON.parse(t);
+    if(d)  depenses = JSON.parse(d);
+    if(r)  recettes = JSON.parse(r);
+    if(a)  animaux  = JSON.parse(a);
+    if(rp) rapports = JSON.parse(rp);
+  } catch(e){}
+}
+
+// ── AUTH ──────────────────────────────────────────────────────────────────
+function loginErr(msg) {
+  document.getElementById('login-err').textContent = msg;
+  document.getElementById('code-input').classList.toggle('error', !!msg);
+}
+
+function doLogin() {
+  const code = document.getElementById('code-input').value.trim();
+  if (code === ADMIN_CODE)  { startApp('admin');  return; }
+  if (code === WORKER_CODE) { startApp('worker'); return; }
+  loginErr('Code incorrect');
+  const inp = document.getElementById('code-input');
+  inp.classList.add('shake');
+  setTimeout(()=>inp.classList.remove('shake'), 500);
+  inp.value = '';
+}
+
+function startApp(r) {
+  role = r;
+  loadAll();
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('header-role').textContent = r === 'admin' ? 'Admin · Sangaré' : 'Terrain · Bourama Traoré';
+
+  if (r === 'admin') {
+    document.getElementById('bottom-nav').style.display = 'flex';
+    document.getElementById('header-right').innerHTML = `<button class="header-btn" onclick="openSheet('quick')">+</button>`;
+    goTab('dashboard');
+  } else {
+    renderWorker();
+  }
+}
+
+// ── ROUTING ───────────────────────────────────────────────────────────────
+function goTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const nb = document.getElementById('nav-'+tab);
+  if (nb) nb.classList.add('active');
+  const p = document.getElementById('page-content');
+  if (tab === 'dashboard') p.innerHTML = renderDashboard();
+  else if (tab === 'taches')    p.innerHTML = renderAdminTaches();
+  else if (tab === 'depenses')  p.innerHTML = renderFinances();
+  else if (tab === 'rapports')  p.innerHTML = renderRapports();
+  else if (tab === 'animaux')   p.innerHTML = renderAnimaux();
+}
+
+// ── SHEET ─────────────────────────────────────────────────────────────────
+function openSheet(type, id) {
+  const s = document.getElementById('sheet');
+  const title = document.getElementById('sheet-title');
+  const content = document.getElementById('sheet-content');
+  s.style.display = 'flex';
+
+  if (type === 'quick') {
+    title.textContent = 'Saisie rapide';
+    content.innerHTML = renderQuickMenu();
+  } else if (type === 'new-tache') {
+    title.textContent = 'Créer une tâche';
+    content.innerHTML = renderNewTacheForm();
+  } else if (type === 'new-dep') {
+    title.textContent = 'Nouvelle dépense';
+    content.innerHTML = renderNewDepForm();
+  } else if (type === 'new-rec') {
+    title.textContent = 'Nouvelle recette';
+    content.innerHTML = renderNewRecForm();
+  } else if (type === 'new-animal') {
+    title.textContent = 'Nouvel animal';
+    content.innerHTML = renderNewAnimalForm();
+  } else if (type === 'cocher') {
+    const t = taches.find(x=>x.id===id);
+    title.textContent = 'Valider la tâche';
+    content.innerHTML = renderCocherForm(t);
+  } else if (type === 'rapport') {
+    title.textContent = 'Rapport journalier';
+    content.innerHTML = renderRapportForm();
+  } else if (type === 'new-dep-worker') {
+    title.textContent = 'Enregistrer une dépense';
+    content.innerHTML = renderNewDepWorker();
+  }
+}
+
+function closeSheet(e) {
+  if (!e || e.target.classList.contains('sheet-bg') || e.target.classList.contains('sheet-overlay') || e.type === 'click' && !e.target.closest('.sheet-box')) {
+    document.getElementById('sheet').style.display = 'none';
+  }
+}
+
+// ── WORKER VIEW ───────────────────────────────────────────────────────────
+function renderWorker() {
+  const restantes = taches.filter(t=>!t.cochee);
+  const faites    = taches.filter(t=>t.cochee);
+  const total     = taches.length;
+  const prog      = total > 0 ? Math.round((faites.length/total)*100) : 0;
+
+  let html = `
+  <div class="worker-hero">
+    <div class="hero-sub">👷 Espace terrain · Bourama Traoré</div>
+    <div class="hero-title">Bonjour Bourama Traoré 🌿</div>
+    <div class="hero-date">${new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'})}</div>
+    <div class="hero-bilan" style="color:#fff">
+      <div class="row-between" style="margin-bottom:10px">
+        <div>
+          <div style="font-size:13px;font-weight:700;opacity:.9">Tâches du jour</div>
+        </div>
+        <div style="font-size:24px;font-weight:900">${faites.length}/${total}</div>
+      </div>
+      <div class="progress-wrap"><div class="progress-fill" style="width:${prog}%"></div></div>
+      <div style="font-size:12px;opacity:.7;text-align:right">${prog}% accompli</div>
+    </div>
+  </div>
+  <div class="page">`;
+
+  // Tâches restantes
+  if (restantes.length > 0) {
+    html += `<div class="sec-title">📋 À faire (${restantes.length})</div>`;
+    restantes.forEach(t => {
+      html += `
+      <div class="task-item" id="task-${t.id}">
+        <div class="task-body">
+          <div class="row-between gap12">
+            <div style="flex:1">
+              <div class="row gap8" style="margin-bottom:6px;flex-wrap:wrap">
+                <span class="pill" style="background:${t.couleur}18;color:${t.couleur};border:1px solid ${t.couleur}30">${t.cat}</span>
+                ${t.urgent?'<span class="pill" style="background:#FDECEA;color:#C0392B;border:1px solid #C0392B30">⚡ Urgent</span>':''}
+              </div>
+              <div style="font-size:15px;font-weight:700">${t.titre}</div>
+              ${t.desc?`<div style="font-size:13px;color:#555;margin-top:4px;line-height:1.4">${t.desc}</div>`:''}
+              ${t.depensePrevue>0?`<div class="task-budget">💰 Budget prévu : ${fmt(t.depensePrevue)} FCFA</div>`:''}
+            </div>
+            <button class="task-check" onclick="openSheet('cocher','${t.id}')">○</button>
+          </div>
+        </div>
+        ${t.depensePrevue>0?`<div class="task-footer">Enregistre le coût réel quand tu fais cette tâche</div>`:''}
+      </div>`;
+    });
+  }
+
+  if (total === 0) {
+    html += `<div class="card"><div class="empty"><div class="empty-icon">✅</div>Aucune tâche assignée aujourd'hui</div></div>`;
+  }
+
+  // Tâches faites
+  if (faites.length > 0) {
+    html += `<div class="sec-title">✅ Accomplies (${faites.length})</div>`;
+    faites.forEach(t => {
+      html += `
+      <div class="card task-done">
+        <div class="row-between gap12">
+          <div style="flex:1">
+            <div class="task-title" style="font-size:14px;font-weight:700">${t.titre}</div>
+            <div class="small mt4">✅ Fait à ${t.heureCochee||'—'}</div>
+            ${t.commentaire?`<div style="font-size:13px;color:#555;margin-top:4px;font-style:italic">💬 ${t.commentaire}</div>`:''}
+            ${t.coutReel>0?`<div style="font-size:13px;color:#C0392B;font-weight:700;margin-top:2px">💰 ${fmt(t.coutReel)} FCFA</div>`:''}
+          </div>
+          <button onclick="decocherTache('${t.id}')" style="background:none;border:none;font-size:18px;cursor:pointer;color:#999;padding:4px 8px">↩</button>
+        </div>
+      </div>`;
+    });
+  }
+
+  html += `
+    <div class="mt16">
+      <button class="btn btn-red" onclick="openSheet('new-dep-worker')" style="margin-bottom:10px">
+        💸 Enregistrer une dépense
+      </button>
+      <button class="btn btn-wa" onclick="openSheet('rapport')">
+        📱 Envoyer le rapport WhatsApp
+      </button>
+    </div>
+  </div>`;
+
+  document.getElementById('page-content').innerHTML = html;
+}
+
+function cocherTache(id) {
+  const commentaire = document.getElementById('cocher-commentaire')?.value || '';
+  const cout = parseInt(document.getElementById('cocher-cout')?.value) || 0;
+
+  taches = taches.map(t => t.id===id
+    ? {...t, cochee:true, dateCochee:todayISO(), heureCochee:nowTime(), commentaire, coutReel:cout}
+    : t
+  );
+
+  if (cout > 0) {
+    const t = taches.find(x=>x.id===id);
+    depenses.unshift({
+      id:'D'+Date.now(), date:todayFR(),
+      cat:'Tâche terrain',
+      desc:`${t?.titre||'Tâche'} — ${commentaire||''}`,
+      mt:cout, par:'Bourama Traoré'
+    });
+  }
+
+  saveAll();
+  document.getElementById('sheet').style.display='none';
+  renderWorker();
+}
+
+function decocherTache(id) {
+  taches = taches.map(t => t.id===id ? {...t,cochee:false,dateCochee:null,heureCochee:null} : t);
+  saveAll();
+  renderWorker();
+}
+
+function renderCocherForm(t) {
+  if (!t) return '';
+  return `
+  <div class="card" style="background:#F0F7F1;border:1px solid #1A5C2A20;margin-bottom:16px">
+    <div class="small">Tâche à valider</div>
+    <div style="font-size:16px;font-weight:800;color:#1A5C2A;margin-top:4px">${t.titre}</div>
+    ${t.depensePrevue>0?`<div style="font-size:13px;color:#E65100;margin-top:6px">💰 Budget prévu : ${fmt(t.depensePrevue)} FCFA</div>`:''}
+  </div>
+  <div class="field">
+    <label>💬 Commentaire (optionnel)</label>
+    <textarea id="cocher-commentaire" placeholder="Ex: Fait en 2h, sol bien préparé..." rows="3"></textarea>
+  </div>
+  <div class="field">
+    <label>💰 Coût réel FCFA (0 si aucun)</label>
+    <input type="number" id="cocher-cout" placeholder="Ex: 15000" value="0">
+  </div>
+  <div style="font-size:12px;color:#999;margin-bottom:16px">Si tu saisis un coût, il sera enregistré automatiquement dans les dépenses.</div>
+  <button class="btn btn-green" onclick="cocherTache('${t.id}')">✅ Valider la tâche</button>`;
+}
+
+function renderRapportForm() {
+  const faites = taches.filter(t=>t.cochee).length;
+  const total  = taches.length;
+  return `
+  <div class="card" style="background:#F0F7F1;border:1px solid #1A5C2A20;margin-bottom:16px">
+    <div style="font-size:13px;color:#1A5C2A;font-weight:700">Format imposé — 1 rapport / 1 question max</div>
+    <div style="font-size:13px;color:#555;margin-top:4px">Progression : ${faites}/${total} tâches accomplies aujourd'hui</div>
+  </div>
+  ${['fait:✅ Fait aujourd\'hui:Résumé des actions du jour',
+     'probleme:⚠️ Problème / Alerte:Ex: 3 plants maïs attaqués zone nord',
+     'depense:💰 Dépenses du jour:Ex: 27 500 FCFA — 1 sac urée',
+     'cultures:👁️ État cultures:Ex: Maïs levée homogène riz OK',
+     'question:❓ 1 seule question urgente:Ex: Quand démarrer semences piment ?'
+    ].map(f=>{const[k,l,p]=f.split(':');return`
+  <div class="field">
+    <label>${l}</label>
+    <textarea id="rap-${k}" placeholder="${p}" rows="2"></textarea>
+  </div>`;}).join('')}
+  <button class="btn btn-wa" onclick="envoyerRapport()">📱 Envoyer via WhatsApp</button>`;
+}
+
+function envoyerRapport() {
+  const faites = taches.filter(t=>t.cochee).length;
+  const total  = taches.length;
+  const v = k => document.getElementById('rap-'+k)?.value||'RAS';
+  const tachesList = taches.filter(t=>t.cochee).map(t=>`  • ${t.titre}`).join('\n')||'  Aucune';
+  const msg =
+`📅 RAPPORT TADIANA — ${todayFR()}
+
+✅ FAIT AUJOURD'HUI (${faites}/${total} tâches)
+${tachesList}
+
+${v('fait')}
+
+⚠️ PROBLÈME / ALERTE
+→ ${document.getElementById('rap-probleme')?.value||'Aucun'}
+
+💰 DÉPENSES DU JOUR
+→ ${document.getElementById('rap-depense')?.value||'Aucune'}
+
+👁️ ÉTAT CULTURES
+→ ${document.getElementById('rap-cultures')?.value||'RAS'}
+
+❓ QUESTION
+→ ${document.getElementById('rap-question')?.value||'Aucune'}
+
+— Bourama Traoré · Champs de Tadiana`;
+
+  // Sauvegarder rapport
+  rapports.unshift({
+    id:'R'+Date.now(), date:todayFR(), heure:nowTime(),
+    auteur:'Bourama Traoré',
+    fait:document.getElementById('rap-fait')?.value||'',
+    probleme:document.getElementById('rap-probleme')?.value||'',
+    depense:document.getElementById('rap-depense')?.value||'',
+    cultures:document.getElementById('rap-cultures')?.value||'',
+    question:document.getElementById('rap-question')?.value||'',
+    tachesFaites:faites, tachesTotal:total
+  });
+  saveAll();
+
+  window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+  document.getElementById('sheet').style.display='none';
+}
+
+function renderNewDepWorker() {
+  return `
+  <div class="field"><label>Catégorie</label>
+    <select id="w-dep-cat">
+      ${["Main d'œuvre","Engrais","Semences","Phytosanitaire","Carburant","Transport","Autre"].map(o=>`<option>${o}</option>`).join('')}
+    </select>
+  </div>
+  <div class="field"><label>Description</label>
+    <input type="text" id="w-dep-desc" placeholder="Ex: 100kg urée — marché Koulikoro">
+  </div>
+  <div class="field"><label>Montant FCFA</label>
+    <input type="number" id="w-dep-mt" placeholder="Ex: 27500">
+  </div>
+  <button class="btn btn-red" onclick="saveWorkerDep()">✅ Enregistrer</button>`;
+}
+
+function saveWorkerDep() {
+  const mt = parseInt(document.getElementById('w-dep-mt')?.value)||0;
+  if (!mt) return;
+  depenses.unshift({
+    id:'D'+Date.now(), date:todayFR(),
+    cat:document.getElementById('w-dep-cat')?.value||'Autre',
+    desc:document.getElementById('w-dep-desc')?.value||'',
+    mt, par:'Bourama Traoré'
+  });
+  saveAll();
+  document.getElementById('sheet').style.display='none';
+  renderWorker();
+}
+
+// ── ADMIN VIEWS ───────────────────────────────────────────────────────────
+
+function renderDashboard() {
+  const totalDep = depenses.reduce((s,d)=>s+d.mt,0);
+  const totalRec = recettes.reduce((s,r)=>s+r.mt,0);
+  const ben = totalRec - totalDep;
+  const faites = taches.filter(t=>t.cochee).length;
+  const total  = taches.length;
+  const prog   = total>0 ? Math.round((faites/total)*100) : 0;
+  const masseRTE = 150000;
+
+  const rappels = [
+    {d:'9 Juil 2026',a:'Contrôle levée riz Wassa (J+5)',u:true},
+    {d:'21 Juil 2026',a:'1er apport urée maïs KABAGNI',u:false},
+    {d:'5 Août 2026',a:'2ème apport urée maïs',u:false},
+    {d:'5 Oct 2026',a:'Récolte maïs KABAGNI',u:false},
+    {d:'5 Nov 2026',a:'Récolte riz Wassa',u:false},
+    {d:'1 Déc 2026',a:'Contrôle pH sol (réf. 6,636)',u:false},
+  ];
+
+  return `<div class="page">
+  <div class="hero" style="background:linear-gradient(145deg,#1A5C2A 0%,#2E7D3C 100%)">
+    <div class="hero-sub">Bilan ferme · 2026</div>
+    <div style="font-size:32px;font-weight:900;margin-bottom:12px">${ben>=0?'+':''}${fmt(ben)} FCFA</div>
+    <div class="hero-bilan-row">
+      <div class="hero-bilan-col">
+        <div class="hero-bilan-col-lbl">↗ Recettes</div>
+        <div class="hero-bilan-col-val">${fmt(totalRec)}</div>
+        <div style="font-size:10px;opacity:.5">FCFA</div>
+      </div>
+      <div class="hero-bilan-col">
+        <div class="hero-bilan-col-lbl">↘ Dépenses</div>
+        <div class="hero-bilan-col-val">${fmt(totalDep)}</div>
+        <div style="font-size:10px;opacity:.5">FCFA</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="background:#F0F7F1;border:1px solid #1A5C2A20">
+    <div class="row-between" style="margin-bottom:10px">
+      <div>
+        <div style="font-size:14px;font-weight:800;color:#1A5C2A">Tâches Bourama Traoré</div>
+        <div class="small">Progression</div>
+      </div>
+      <div style="font-size:26px;font-weight:900;color:#1A5C2A">${faites}/${total}</div>
+    </div>
+    <div style="background:#E8E8E8;border-radius:20px;height:8px">
+      <div style="height:100%;background:#1A5C2A;border-radius:20px;width:${prog}%"></div>
+    </div>
+    <div class="row-between mt8">
+      <span class="small">${prog}% accompli</span>
+      <span style="font-size:12px;color:#1A5C2A;font-weight:700;cursor:pointer" onclick="goTab('taches')">Gérer →</span>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-box"><div class="stat-val green">${fmt(ben).replace(/\s/g,'')}</div><div class="stat-lbl">Bénéfice FCFA</div></div>
+    <div class="stat-box"><div class="stat-val" style="color:#E65100">${fmt(masseRTE)}</div><div class="stat-lbl">MR mensuelle</div></div>
+    <div class="stat-box"><div class="stat-val green">6,636</div><div class="stat-lbl">pH sol ✅</div></div>
+    <div class="stat-box"><div class="stat-val" style="color:#1565C0">730</div><div class="stat-lbl">Pieds agrumes</div></div>
+  </div>
+
+  <div class="sec-title">📅 Rappels hivernage 2026</div>
+  <div class="card">
+    ${rappels.map(r=>`
+    <div class="rappel-item">
+      <div class="rappel-icon" style="background:${r.u?'#FDECEA':'#E8F5E9'}">${r.u?'⚡':'📅'}</div>
+      <div style="flex:1">
+        <div style="font-size:14px;font-weight:700">${r.a}</div>
+        <div class="small">${r.d}</div>
+      </div>
+      ${r.u?'<span class="pill" style="background:#FDECEA;color:#C0392B;border:1px solid #C0392B30">Urgent</span>':''}
+    </div>`).join('')}
+  </div>
+  </div>`;
+}
+
+function renderAdminTaches() {
+  const actives = taches.filter(t=>!t.cochee);
+  const cochees = taches.filter(t=>t.cochee);
+  const catColors = {Cultures:'#1A5C2A',Maintenance:'#E65100',Engrais:'#D4AC0D',Construction:'#6A1B9A',Irrigation:'#1565C0',Traitement:'#C0392B',Achat:'#B8860B',Autre:'#607D8B'};
+
+  return `<div class="page">
+  <div class="row-between" style="margin-bottom:14px">
+    <div style="font-size:20px;font-weight:900">✅ Tâches de Bourama</div>
+    <button class="btn btn-green btn-sm" onclick="openSheet('new-tache')">+ Créer</button>
+  </div>
+
+  <div class="card" style="background:#F0F7F1;border:1px solid #1A5C2A20">
+    <div style="font-size:13px;color:#1A5C2A;font-weight:700">${actives.length} tâche${actives.length!==1?'s':''} en attente · ${cochees.length} accomplie${cochees.length!==1?'s':''}</div>
+    <div style="font-size:13px;color:#555;margin-top:4px">Bourama accède avec le code <strong>40</strong></div>
+  </div>
+
+  ${actives.length===0?`<div class="card"><div class="empty"><div class="empty-icon">📋</div>Aucune tâche en attente</div></div>`:''}
+
+  ${actives.length>0?`<div class="sec-title">En attente (${actives.length})</div>
+  ${actives.map(t=>`
+  <div class="card">
+    <div class="row-between gap12">
+      <div style="flex:1">
+        <div class="row gap8" style="margin-bottom:6px;flex-wrap:wrap">
+          <span class="pill" style="background:${(catColors[t.cat]||'#607D8B')}18;color:${catColors[t.cat]||'#607D8B'};border:1px solid ${(catColors[t.cat]||'#607D8B')}30">${t.cat}</span>
+          ${t.urgent?'<span class="pill" style="background:#FDECEA;color:#C0392B;border:1px solid #C0392B30">⚡ Urgent</span>':''}
+        </div>
+        <div style="font-size:15px;font-weight:700">${t.titre}</div>
+        ${t.desc?`<div style="font-size:13px;color:#555;margin-top:2px">${t.desc}</div>`:''}
+        ${t.depensePrevue>0?`<div class="task-budget">💰 Budget : ${fmt(t.depensePrevue)} FCFA</div>`:''}
+        <div class="small mt4">Créé le ${t.creeLe}</div>
+      </div>
+      <button onclick="supprimerTache('${t.id}')" style="background:none;border:none;font-size:18px;cursor:pointer;color:#999;padding:4px 8px">🗑</button>
+    </div>
+  </div>`).join('')}`:''}
+
+  ${cochees.length>0?`<div class="sec-title">✅ Accomplies (${cochees.length})</div>
+  ${cochees.map(t=>`
+  <div class="card" style="opacity:.75">
+    <div class="row-between gap12">
+      <div style="flex:1">
+        <div style="font-size:14px;font-weight:700;text-decoration:line-through;color:#888">${t.titre}</div>
+        <div class="small mt4" style="color:#1A5C2A">✅ Fait le ${t.dateCochee||''} à ${t.heureCochee||''}</div>
+        ${t.commentaire?`<div style="font-size:13px;color:#555;margin-top:4px;font-style:italic">💬 ${t.commentaire}</div>`:''}
+        ${t.coutReel>0?`<div style="font-size:13px;color:#C0392B;font-weight:700;margin-top:2px">💰 Coût réel : ${fmt(t.coutReel)} FCFA</div>`:''}
+      </div>
+      <button onclick="resetTache('${t.id}')" style="background:none;border:none;font-size:14px;cursor:pointer;color:#999;padding:4px 8px">↩</button>
+    </div>
+  </div>`).join('')}`:''}
+  </div>`;
+}
+
+function renderNewTacheForm() {
+  return `
+  <div class="field"><label>Titre de la tâche</label>
+    <input type="text" id="nt-titre" placeholder="Ex: Arroser agrumes Zone A">
+  </div>
+  <div class="field"><label>Instructions (optionnel)</label>
+    <textarea id="nt-desc" rows="3" placeholder="Ex: 30L par pied, avant 8h du matin"></textarea>
+  </div>
+  <div class="field"><label>Catégorie</label>
+    <select id="nt-cat">
+      ${['Cultures','Irrigation','Engrais','Traitement','Élevage','Maintenance','Construction','Achat','Autre'].map(o=>`<option>${o}</option>`).join('')}
+    </select>
+  </div>
+  <div class="field"><label>Budget prévu FCFA (0 si aucun)</label>
+    <input type="number" id="nt-budget" placeholder="0" value="0">
+  </div>
+  <div style="margin-bottom:16px;display:flex;align-items:center;gap:12px;cursor:pointer">
+    <input type="checkbox" id="nt-urgent" style="width:20px;height:20px;cursor:pointer">
+    <label for="nt-urgent" style="font-size:14px;font-weight:600;color:#C0392B;cursor:pointer">⚡ Marquer comme urgent</label>
+  </div>
+  <button class="btn btn-green" onclick="saveTache()">✅ Créer la tâche</button>`;
+}
+
+function saveTache() {
+  const titre = document.getElementById('nt-titre')?.value?.trim();
+  if (!titre) return;
+  const catColors = {Cultures:'#1A5C2A',Maintenance:'#E65100',Engrais:'#D4AC0D',Construction:'#6A1B9A',Irrigation:'#1565C0',Traitement:'#C0392B',Achat:'#B8860B',Autre:'#607D8B'};
+  const cat = document.getElementById('nt-cat')?.value||'Autre';
+  taches.unshift({
+    id:'T'+Date.now(), titre, cat,
+    desc:document.getElementById('nt-desc')?.value||'',
+    couleur:catColors[cat]||'#607D8B',
+    urgent:document.getElementById('nt-urgent')?.checked||false,
+    depensePrevue:parseInt(document.getElementById('nt-budget')?.value)||0,
+    cochee:false,dateCochee:null,heureCochee:null,
+    creeLe:todayFR(),commentaire:'',coutReel:0
+  });
+  saveAll();
+  document.getElementById('sheet').style.display='none';
+  goTab('taches');
+}
+
+function supprimerTache(id) {
+  if (!confirm('Supprimer cette tâche ?')) return;
+  taches = taches.filter(t=>t.id!==id);
+  saveAll();
+  goTab('taches');
+}
+
+function resetTache(id) {
+  taches = taches.map(t=>t.id===id?{...t,cochee:false,dateCochee:null,heureCochee:null}:t);
+  saveAll();
+  goTab('taches');
+}
+
+function renderFinances() {
+  const totalDep = depenses.reduce((s,d)=>s+d.mt,0);
+  const totalRec = recettes.reduce((s,r)=>s+r.mt,0);
+  const ben = totalRec - totalDep;
+  const catColors = {'Équipement':'#E65100',"Main d'œuvre":'#1A5C2A',Engrais:'#D4AC0D',Semences:'#1565C0',Phytosanitaire:'#C0392B',Carburant:'#607D8B',Transport:'#607D8B','Tâche terrain':'#2E7D3C',Autre:'#607D8B'};
+  const catDep = depenses.reduce((a,d)=>{a[d.cat]=(a[d.cat]||0)+d.mt;return a;},{});
+
+  return `<div class="page">
+  <div style="font-size:20px;font-weight:900;margin-bottom:14px">💰 Finances</div>
+
+  <div class="hero" style="background:linear-gradient(145deg,#1A5C2A 0%,#2E7D3C 100%)">
+    <div class="hero-sub">Bénéfice 2026</div>
+    <div style="font-size:28px;font-weight:900;color:#fff;margin-bottom:12px">${ben>=0?'+':''}${fmt(ben)} FCFA</div>
+    <div class="hero-bilan-row">
+      <div class="hero-bilan-col">
+        <div class="hero-bilan-col-lbl">↗ Recettes</div>
+        <div class="hero-bilan-col-val">${fmt(totalRec)}</div>
+        <div style="font-size:10px;opacity:.5">FCFA</div>
+      </div>
+      <div class="hero-bilan-col">
+        <div class="hero-bilan-col-lbl">↘ Dépenses</div>
+        <div class="hero-bilan-col-val">${fmt(totalDep)}</div>
+        <div style="font-size:10px;opacity:.5">FCFA</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab-btn ${finTab==='dep'?'active':''}" onclick="setFinTab('dep')">↘ Dépenses</button>
+    <button class="tab-btn ${finTab==='rec'?'active':''}" onclick="setFinTab('rec')">↗ Recettes</button>
+    <button class="tab-btn ${finTab==='bilan'?'active':''}" onclick="setFinTab('bilan')">📊 Bilan</button>
+  </div>
+
+  <div id="fin-content">
+    ${renderFinContent()}
+  </div>
+  </div>`;
+}
+
+function setFinTab(t) {
+  finTab = t;
+  const el = document.getElementById('fin-content');
+  if (el) el.innerHTML = renderFinContent();
+  document.querySelectorAll('.tab-btn').forEach(b=>{
+    b.classList.toggle('active', b.textContent.includes(t==='dep'?'Dépenses':t==='rec'?'Recettes':'Bilan'));
+  });
+}
+
+function renderFinContent() {
+  const catColors = {'Équipement':'#E65100',"Main d'œuvre":'#1A5C2A',Engrais:'#D4AC0D',Semences:'#1565C0',Phytosanitaire:'#C0392B',Carburant:'#607D8B',Transport:'#607D8B','Tâche terrain':'#2E7D3C',Autre:'#607D8B'};
+  const totalDep = depenses.reduce((s,d)=>s+d.mt,0);
+  const catDep = depenses.reduce((a,d)=>{a[d.cat]=(a[d.cat]||0)+d.mt;return a;},{});
+
+  if (finTab==='dep') return `
+    <button class="btn btn-red" onclick="openSheet('new-dep')" style="margin-bottom:10px">+ Nouvelle dépense</button>
+    ${depenses.map(d=>`
+    <div class="card">
+      <div class="row-between gap12">
+        <div style="flex:1">
+          <span class="pill" style="background:${(catColors[d.cat]||'#607D8B')}18;color:${catColors[d.cat]||'#607D8B'};border:1px solid ${(catColors[d.cat]||'#607D8B')}30">${d.cat}</span>
+          <div style="font-size:14px;font-weight:700;margin-top:6px">${d.desc}</div>
+          <div class="small mt4">📅 ${d.date} · ${d.par}</div>
+        </div>
+        <div style="font-size:15px;font-weight:900;color:#C0392B;margin-left:12px">−${fmt(d.mt)}<br><span style="font-size:10px;color:#999;font-weight:400">FCFA</span></div>
+      </div>
+    </div>`).join('')||'<div class="card"><div class="empty">Aucune dépense</div></div>'}`;
+
+  if (finTab==='rec') return `
+    <button class="btn btn-green2" onclick="openSheet('new-rec')" style="margin-bottom:10px">+ Nouvelle recette</button>
+    ${recettes.length===0?'<div class="card"><div class="empty">Première récolte prévue octobre 2026</div></div>':
+    recettes.map(r=>`
+    <div class="card">
+      <div class="row-between gap12">
+        <div style="flex:1">
+          <span class="pill" style="background:#1A5C2A18;color:#1A5C2A;border:1px solid #1A5C2A30">${r.cat}</span>
+          <div style="font-size:14px;font-weight:700;margin-top:6px">${r.desc}</div>
+          <div class="small mt4">📅 ${r.date} · ${r.acheteur}</div>
+        </div>
+        <div style="font-size:15px;font-weight:900;color:#1A5C2A;margin-left:12px">+${fmt(r.mt)}<br><span style="font-size:10px;color:#999;font-weight:400">FCFA</span></div>
+      </div>
+    </div>`).join('')}`;
+
+  return `
+    <div class="sec-title">Par catégorie de dépense</div>
+    ${Object.entries(catDep).map(([cat,mt])=>`
+    <div class="card">
+      <div class="row-between" style="margin-bottom:8px">
+        <span class="pill" style="background:${(catColors[cat]||'#607D8B')}18;color:${catColors[cat]||'#607D8B'};border:1px solid ${(catColors[cat]||'#607D8B')}30">${cat}</span>
+        <span style="font-weight:800;color:#C0392B">−${fmt(mt)} FCFA</span>
+      </div>
+      <div style="background:#F4F5F2;border-radius:8px;height:6px">
+        <div style="background:${catColors[cat]||'#607D8B'};height:6px;border-radius:8px;width:${Math.round((mt/totalDep)*100)}%"></div>
+      </div>
+      <div class="small mt4" style="text-align:right">${Math.round((mt/totalDep)*100)}%</div>
+    </div>`).join('')||'<div class="card"><div class="empty">Aucune dépense</div></div>'}`;
+}
+
+function renderNewDepForm() {
+  return `
+  <div class="field"><label>Catégorie</label>
+    <select id="dep-cat">
+      ${["Main d'œuvre","Engrais","Semences","Phytosanitaire","Équipement","Carburant","Transport","Autre"].map(o=>`<option>${o}</option>`).join('')}
+    </select>
+  </div>
+  <div class="field"><label>Description</label>
+    <input type="text" id="dep-desc" placeholder="Ex: Achat urée 4 sacs">
+  </div>
+  <div class="field"><label>Montant FCFA</label>
+    <input type="number" id="dep-mt" placeholder="Ex: 110000">
+  </div>
+  <div class="field"><label>Payé par</label>
+    <select id="dep-par">
+      ${['Sangaré','Bourama Traoré','Mamadou Koné','Adama Cissé','Moussa Koné'].map(o=>`<option>${o}</option>`).join('')}
+    </select>
+  </div>
+  <button class="btn btn-red" onclick="saveDep()">✅ Enregistrer</button>`;
+}
+
+function saveDep() {
+  const mt = parseInt(document.getElementById('dep-mt')?.value)||0;
+  if (!mt) return;
+  depenses.unshift({
+    id:'D'+Date.now(), date:todayFR(),
+    cat:document.getElementById('dep-cat')?.value||'Autre',
+    desc:document.getElementById('dep-desc')?.value||'',
+    mt, par:document.getElementById('dep-par')?.value||'Sangaré'
+  });
+  saveAll();
+  document.getElementById('sheet').style.display='none';
+  goTab('depenses');
+}
+
+function renderNewRecForm() {
+  return `
+  <div class="field"><label>Source</label>
+    <select id="rec-cat">
+      ${['Piment','Maïs','Riz','Haricot','Banane','Agrumes','Élevage','Autre'].map(o=>`<option>${o}</option>`).join('')}
+    </select>
+  </div>
+  <div class="field"><label>Description</label>
+    <input type="text" id="rec-desc" placeholder="Ex: Vente 200kg piment — Bamako">
+  </div>
+  <div class="field"><label>Montant FCFA</label>
+    <input type="number" id="rec-mt" placeholder="Ex: 150000">
+  </div>
+  <div class="field"><label>Acheteur</label>
+    <input type="text" id="rec-acheteur" placeholder="Ex: Marché Médina Coura">
+  </div>
+  <button class="btn btn-green2" onclick="saveRec()">✅ Enregistrer</button>`;
+}
+
+function saveRec() {
+  const mt = parseInt(document.getElementById('rec-mt')?.value)||0;
+  if (!mt) return;
+  recettes.unshift({
+    id:'R'+Date.now(), date:todayFR(),
+    cat:document.getElementById('rec-cat')?.value||'Autre',
+    desc:document.getElementById('rec-desc')?.value||'',
+    mt, acheteur:document.getElementById('rec-acheteur')?.value||''
+  });
+  saveAll();
+  document.getElementById('sheet').style.display='none';
+  goTab('depenses');
+}
+
+function renderRapports() {
+  if (rapports.length===0) return `<div class="page">
+    <div style="font-size:20px;font-weight:900;margin-bottom:14px">📋 Rapports terrain</div>
+    <div class="card"><div class="empty"><div class="empty-icon">📭</div>Aucun rapport reçu.<br>Bourama envoie son rapport depuis son espace.</div></div>
+  </div>`;
+
+  return `<div class="page">
+  <div style="font-size:20px;font-weight:900;margin-bottom:14px">📋 Rapports terrain</div>
+  ${rapports.map(r=>`
+  <div class="card">
+    <div class="row-between" style="margin-bottom:12px">
+      <div>
+        <div style="font-size:15px;font-weight:800">Rapport du ${r.date}</div>
+        <div class="small">Envoyé à ${r.heure} · ${r.auteur}</div>
+      </div>
+      <span class="pill" style="background:#E8F5E9;color:#1A5C2A;border:1px solid #1A5C2A30">${r.tachesFaites}/${r.tachesTotal} tâches</span>
+    </div>
+    ${[['✅ Fait',r.fait],['⚠️ Alerte',r.probleme],['💰 Dépenses',r.depense],['👁️ Cultures',r.cultures],['❓ Question',r.question]].filter(x=>x[1]).map(x=>`
+    <div class="divider"></div>
+    <div style="margin-top:8px">
+      <div style="font-size:11px;font-weight:700;color:#555">${x[0]}</div>
+      <div style="font-size:14px;margin-top:2px">${x[1]}</div>
+    </div>`).join('')}
+  </div>`).join('')}
+  </div>`;
+}
+
+function renderAnimaux() {
+  const moutons = animaux.filter(a=>a.type==='Mouton');
+  const chevres = animaux.filter(a=>a.type==='Chèvre');
+  const statusColor = {Engraissement:'#E65100',Reproduction:'#6A1B9A',Lactation:'#1565C0','À vendre':'#C0392B'};
+
+  return `<div class="page">
+  <div class="row-between" style="margin-bottom:14px">
+    <div style="font-size:20px;font-weight:900">🐐 Animaux</div>
+    <button class="btn btn-green btn-sm" onclick="openSheet('new-animal')">+ Ajouter</button>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-box"><div class="stat-val" style="color:#1565C0">${moutons.length}</div><div class="stat-lbl">🐑 Moutons</div></div>
+    <div class="stat-box"><div class="stat-val" style="color:#6A1B9A">${chevres.length}</div><div class="stat-lbl">🐐 Chèvres</div></div>
+  </div>
+
+  <div class="card" style="background:#FFF8E1;border:1px solid #B8860B30;margin-bottom:14px">
+    <div style="font-size:13px;color:#B8860B;font-weight:700">🕌 Tabaski 2027 — ~17 juin</div>
+    <div style="font-size:13px;color:#555;margin-top:4px">Démarrer engraissement intensif en mars 2027. Prix : 150 000 – 400 000 FCFA/mouton.</div>
+  </div>
+
+  ${moutons.length>0?`<div class="sec-title">🐑 Moutons (${moutons.length})</div>
+  ${moutons.map(a=>animalCard(a,statusColor)).join('')}`:''}
+
+  ${chevres.length>0?`<div class="sec-title">🐐 Chèvres (${chevres.length})</div>
+  ${chevres.map(a=>animalCard(a,statusColor)).join('')}`:''}
+
+  ${animaux.length===0?`<div class="card"><div class="empty"><div class="empty-icon">🐐</div>Aucun animal enregistré</div></div>`:''}
+  </div>`;
+}
+
+function animalCard(a, statusColor) {
+  return `
+  <div class="card">
+    <div class="row gap12">
+      <div style="width:48px;height:48px;border-radius:14px;background:${a.type==='Mouton'?'#E3F2FD':'#F3E5F5'};display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0">${a.type==='Mouton'?'🐑':'🐐'}</div>
+      <div style="flex:1">
+        <div class="row gap8" style="margin-bottom:4px">
+          <span style="font-weight:800">N° ${a.id}</span>
+          <span class="pill" style="background:${a.type==='Mouton'?'#E3F2FD':'#F3E5F5'};color:${a.type==='Mouton'?'#1565C0':'#6A1B9A'};border:1px solid ${a.type==='Mouton'?'#1565C030':'#6A1B9A30'}">${a.collier}</span>
+        </div>
+        <div style="font-size:13px;color:#555">${a.couleur} · ${a.poids}kg · ${a.sexe==='M'?'♂ Mâle':'♀ Femelle'}</div>
+        <span class="pill mt4" style="background:${(statusColor[a.statut]||'#607D8B')}18;color:${statusColor[a.statut]||'#607D8B'};border:1px solid ${(statusColor[a.statut]||'#607D8B')}30">${a.statut}</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderNewAnimalForm() {
+  return `
+  <div class="field"><label>Type</label>
+    <select id="an-type"><option>Mouton</option><option>Chèvre</option></select>
+  </div>
+  <div class="field"><label>Sexe</label>
+    <select id="an-sexe"><option value="M">♂ Mâle</option><option value="F">♀ Femelle</option></select>
+  </div>
+  <div class="field"><label>Couleur</label>
+    <input type="text" id="an-couleur" placeholder="Blanc, Brun, Noir...">
+  </div>
+  <div class="field"><label>Poids (kg)</label>
+    <input type="number" id="an-poids" placeholder="Ex: 35">
+  </div>
+  <div class="field"><label>Statut</label>
+    <select id="an-statut">
+      ${['Engraissement','Reproduction','Lactation','À vendre'].map(o=>`<option>${o}</option>`).join('')}
+    </select>
+  </div>
+  <button class="btn btn-green" onclick="saveAnimal()">✅ Enregistrer</button>`;
+}
+
+function saveAnimal() {
+  const type = document.getElementById('an-type')?.value||'Mouton';
+  const n = animaux.filter(a=>a.type===type).length+1;
+  const collier = type==='Mouton'?'Bleu-'+String(n).padStart(2,'0'):'Jaune-'+String(n).padStart(2,'0');
+  animaux.push({
+    id:(type==='Mouton'?'M':'C')+String(n).padStart(2,'0'),
+    type, collier,
+    sexe:document.getElementById('an-sexe')?.value||'M',
+    couleur:document.getElementById('an-couleur')?.value||'',
+    poids:parseFloat(document.getElementById('an-poids')?.value)||0,
+    statut:document.getElementById('an-statut')?.value||'Engraissement',
+    dateEntree:todayISO()
+  });
+  saveAll();
+  document.getElementById('sheet').style.display='none';
+  goTab('animaux');
+}
+
+function renderQuickMenu() {
+  const actions = [
+    {id:'new-dep',emoji:'💸',label:'Dépense',desc:"Enregistrer une sortie d'argent"},
+    {id:'new-rec',emoji:'💰',label:'Recette / Vente',desc:"Enregistrer une entrée d'argent"},
+    {id:'new-tache',emoji:'✅',label:'Tâche pour Bourama',desc:"Créer une nouvelle tâche terrain"},
+    {id:'new-animal',emoji:'🐐',label:'Nouvel animal',desc:"Ajouter un animal au troupeau"},
+  ];
+  return actions.map(a=>`
+  <div onclick="openSheet('${a.id}')" style="display:flex;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid #E8E8E8;cursor:pointer">
+    <div style="width:44px;height:44px;border-radius:12px;background:#F0F7F1;display:flex;align-items:center;justify-content:center;font-size:22px">${a.emoji}</div>
+    <div>
+      <div style="font-weight:700;font-size:15px">${a.label}</div>
+      <div style="font-size:13px;color:#999">${a.desc}</div>
+    </div>
+    <div style="margin-left:auto;color:#E8E8E8;font-size:20px">›</div>
+  </div>`).join('');
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+document.getElementById('code-input').focus();
+</script>
+</body>
+</html>
